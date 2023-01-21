@@ -6,7 +6,7 @@ const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
   return (
-    <Layout>
+    <Layout title="Index">
       <div>
         <div>
           <h1>Find the next foodplace or restaurant in Berlin</h1>

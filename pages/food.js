@@ -2,7 +2,7 @@ import Layout from "@/components/layout"
 
 export default function Food() {
     return (
-        <Layout>
+        <Layout title="Food">
             <p>Foo</p>
         </Layout>
     )
