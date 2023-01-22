@@ -1,10 +1,29 @@
 import { Inter } from '@next/font/google'
 import styles from '@/styles/Home.module.css'
 import Layout from '@/components/layout'
+import { NextRequest } from 'next/server'
+import { NextResponse } from 'next/server'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
+
+  function redirectToFood(position) {
+    const url = NextRequest.nextUrl.clone();
+    console.log(url);
+
+    NextResponse.redirect('/food');
+  }
+
+  function handeClick() {
+    if (!navigator.geolocation) {
+      alert('Geolocation is not supported by this browser');
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(redirectToFood);
+  }
+
   return (
     <Layout title="Index">
       <div>
@@ -17,11 +36,9 @@ export default function Home() {
           </p>
         </div>
 
-        <form action='/food'>
-          <button type='Submit'>
-            Find food
-          </button>
-        </form>
+        <button onClick={handeClick} type='Submit'>
+          Find food
+        </button>
       </div>
     </Layout>
   )
