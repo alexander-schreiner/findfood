@@ -3,6 +3,7 @@ const axios = require('axios');
 require('dotenv').config({
     path: '../.env'
 });
+const setTimeout = require("timers/promises");
 
 async function fetchData(pageToken = null) {
     let url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json';
@@ -19,6 +20,8 @@ async function fetchData(pageToken = null) {
         url += '&type=restaurant';
         url += '&rankby=prominence';
     }
+
+    console.log(url);
 
     let res = await axios({
         method: 'get',
@@ -40,9 +43,11 @@ async function fetchData(pageToken = null) {
     let i = 0;
     while (loop) {
         i++;
-        //        let data = await fetchData(nextPageToken);
+        let data = await fetchData(nextPageToken);
+        /*
         let rawJson = fs.readFileSync('./data.txt', { encoding: 'utf8', flag: 'r' });
         let data = JSON.parse(rawJson);
+        */
 
         if (data === 'error') {
             console.log('ERROR!');
@@ -63,9 +68,7 @@ async function fetchData(pageToken = null) {
 
         fs.appendFileSync('./rawPlaces.json', str);
 
-        await setTimeout(() => {
-
-        }, 5000);
+        await setTimeout.setTimeout(3000);
 
         if (i > 500) {
             return;
