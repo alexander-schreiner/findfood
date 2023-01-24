@@ -1,9 +1,3 @@
-/*
-require('dotenv').config({
-    path: '../.env'
-});
-*/
-
 async function findNearbyFoodPlace(lat, lon): Promise<{ name: string, rating: number, ratingCount: number, address: string, googleMapsLink: string } | "Error"> {
     let params = new URLSearchParams({
         key: process.env.GOOGLE_MAPS_API_KEY,
