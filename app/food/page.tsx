@@ -104,7 +104,7 @@ async function getGoogleMapsLink(name, address, lat, lon) {
     return 'https://www.google.com/maps/dir/' + String(lat) + ',' + String(lon) + '/' + encodeURIComponent(name) + ',' + encodeURIComponent(address);
 }
 
-export default async function FoodPage({ searchParams }) {
+export default async function FoodPage({ params, searchParams }) {
     const place = await findNearbyFoodPlace(searchParams.lat, searchParams.lon);
 
     if (place === 'Error') {
