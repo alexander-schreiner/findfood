@@ -2,9 +2,7 @@ require('dotenv').config({
     path: '../.env'
 });
 
-const Image = require('next/image');
-
-async function findNearbyFoodPlace(lat, lon) {
+async function findNearbyFoodPlace(lat, lon): Promise<{ name: string, rating: number, ratingCount: number, address: string, googleMapsLink: string } | "Error"> {
     let params = new URLSearchParams({
         key: process.env.GOOGLE_MAPS_API_KEY,
         location: lat + ',' + lon,
@@ -109,6 +107,12 @@ async function getGoogleMapsLink(name, address, lat, lon) {
 
 export default async function FoodPage({ searchParams }) {
     const place = await findNearbyFoodPlace(searchParams.lat, searchParams.lon);
+
+    if (place === 'Error') {
+        return (
+            <h1>Error occoured</h1>
+        );
+    }
 
     return (
         <>
