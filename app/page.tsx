@@ -37,7 +37,7 @@ export default function Home() {
                     </div>
                 </div>
 
-                <div className="px-4 py-5 sm:px-6">
+                <div className="flex justify-center px-4 py-5 sm:px-6">
                     <button onClick={handeClick} className="findFoodButton">
                         Find food
                     </button>
