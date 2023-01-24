@@ -102,6 +102,9 @@ async function getGoogleMapsLink(name, address, lat, lon) {
 }
 
 export default async function FoodPage({ params, searchParams }) {
+    console.log(params);
+    console.log(searchParams);
+
     const place = await findNearbyFoodPlace(searchParams.lat, searchParams.lon);
 
     if (place === 'Error') {
