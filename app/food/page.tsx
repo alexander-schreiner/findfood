@@ -1,4 +1,7 @@
 async function findNearbyFoodPlace(lat, lon): Promise<{ name: string, rating: number, ratingCount: number, address: string, googleMapsLink: string } | "Error"> {
+    console.log(lat);
+    console.log(lon);
+
     let params = new URLSearchParams({
         key: process.env.GOOGLE_MAPS_API_KEY,
         location: lat + ',' + lon,
