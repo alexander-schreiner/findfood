@@ -1,3 +1,6 @@
+export const dynamic = 'force-dynamic',
+    revalidate = 30
+
 async function findNearbyFoodPlace(lat, lon): Promise<{ name: string, rating: number, ratingCount: number, address: string, googleMapsLink: string } | "Error"> {
     console.log(lat);
     console.log(lon);
