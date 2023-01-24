@@ -15,6 +15,7 @@ async function findNearbyFoodPlace(lat, lon): Promise<{ name: string, rating: nu
     });
 
     let url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?' + params.toString();
+    console.log(url);
     const res = await fetch(url);
     const data = await res.json();
 
