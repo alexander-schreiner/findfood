@@ -1,4 +1,5 @@
 import styles from '../styles/Home.module.css'
+import '../styles/globals.css'
 
 export default function RootLayout({
   children

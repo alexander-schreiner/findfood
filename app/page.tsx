@@ -24,19 +24,25 @@ export default function Home() {
     }
 
     return (
-        <div>
-            <div>
-                <h1>Find the next foodplace or restaurant in Berlin</h1>
-                <p>
-                    Can't decide where to go out and grab some food in Berlin?
-                    Sometimes too much options are an obstacle. Just tap "Find food"
-                    and find your next meal destination!
-                </p>
-            </div>
+        <>
+            <div className="overflow-hidden bg-white shadow sm:rounded-lg">
+                <div className="px-4 py-5 sm:px-6">
+                    <div className="flex flex-col space-y-4">
+                        <h1 className="text-4xl font-bold">Find the next foodplace or restaurant near you!</h1>
+                        <p className="text-xl">
+                            Can't decide where to go out and grab some food?
+                            Sometimes too much options are an obstacle. Just tap "Find food"
+                            and find your next meal destination!
+                        </p>
+                    </div>
+                </div>
 
-            <button onClick={handeClick}>
-                Find food
-            </button>
-        </div>
+                <div className="px-4 py-5 sm:px-6">
+                    <button onClick={handeClick} className="findFoodButton">
+                        Find food
+                    </button>
+                </div>
+            </div>
+        </>
     )
 }
