@@ -13,7 +13,6 @@ async function findNearbyFoodPlace(lat, lon): Promise<{ name: string, rating: nu
     });
 
     let url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?' + params.toString();
-    console.log(url);
     const res = await fetch(url);
     const data = await res.json();
 
@@ -116,10 +115,14 @@ export default async function FoodPage({ searchParams }) {
 
     return (
         <>
-            <h1>{place.name} (Rating: {place.rating}/5)</h1>
-            <h2>{place.address}</h2>
+            <div className="overflow-hidden bg-white shadow sm:rounded-lg">
+                <div className="px-4 py-5 sm:px-6">
+                    <h1 className="text-3xl">{place.name} (Rating: {place.rating}/5)</h1>
+                    <h2 className="text-xl">{place.address}</h2>
 
-            <a href={place.googleMapsLink}>Get directions</a>
+                    <a href={place.googleMapsLink} className="directionsButton">Get directions</a>
+                </div>
+            </div>
         </>
     )
 }

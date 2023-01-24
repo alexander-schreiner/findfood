@@ -76,3 +76,15 @@ a {
 .findFoodButton:focus {
   @apply outline-none ring-2 ring-green-500 ring-offset-2;
 }
+
+.directionsButton {
+  @apply mt-6 flex items-center justify-center rounded-md border border-transparent bg-green-700 py-3 px-8 text-base font-bold text-white w-full;
+}
+
+.directionsButton:hover {
+  @apply bg-green-800;
+}
+
+.directionsButton:focus {
+  @apply outline-none ring-2 ring-green-500 ring-offset-2;
+}
