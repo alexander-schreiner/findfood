@@ -122,7 +122,7 @@ export default async function FoodPage({ params, searchParams }) {
     return (
         <>
             <div className="overflow-hidden bg-white shadow sm:rounded-lg">
-                <div className="px-4 py-5 sm:px-6">
+                <div className="px-4 py-5 sm:px-6 min-h-screen">
                     <h1 className="text-3xl">{place.name} (Rating: {place.rating}/5)</h1>
                     <h2 className="text-xl">{place.address}</h2>
 

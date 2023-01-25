@@ -25,8 +25,8 @@ export default function Home() {
 
     return (
         <>
-            <div className="overflow-hidden bg-white shadow sm:rounded-lg">
-                <div className="px-4 py-5 sm:px-6">
+            <div className="overflow-hidden bg-white shadow sm:rounded-lg min-h-screen">
+                <div className="px-4 py-5 sm:px-6 ">
                     <div className="flex flex-col space-y-4">
                         <h1 className="text-4xl font-bold">Find the next foodplace or restaurant near you!</h1>
                         <p className="text-xl">
