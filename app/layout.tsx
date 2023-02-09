@@ -1,4 +1,3 @@
-import styles from '../styles/Home.module.css'
 import '../styles/globals.css'
 
 export default function RootLayout({
@@ -13,7 +12,7 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" />
       </head>
       <body>
-        <main className={styles.main}>{children}</main>
+        <main className="flex flex-col justify-between items-center bg-gray-100">{children}</main>
       </body>
     </html>
   )
