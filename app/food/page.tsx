@@ -1,30 +1,18 @@
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
+import { Redis } from 'ioredis';
+import { RedisClient } from 'ioredis/built/connectors/SentinelConnector/types';
+
 export const dynamic = 'force-dynamic',
     revalidate = 30
 
-async function findNearbyFoodPlace(lat, lon): Promise<{ name: string, rating: number, ratingCount: number, address: string, googleMapsLink: string } | "Error"> {
-    console.log(lat);
-    console.log(lon);
 
-    let params = new URLSearchParams({
-        key: process.env.GOOGLE_MAPS_API_KEY,
-        location: lat + ',' + lon,
-        radius: '5000',
-        type: 'restaurant',
-        opennow: '1',
-        rankby: 'prominence'
-    });
+const redisClient = new Redis(process.env.REDIS_URL);
 
-    let url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?' + params.toString();
-    console.log(url);
-    const res = await fetch(url);
-    const data = await res.json();
+async function findNearbyFoodPlace(key: string, lat: number, lon: number)
+    : Promise<{ name: string, rating: number, ratingCount: number, address: string, googleMapsLink: string } | "Error"> {
 
-    if (data.status !== 'OK') {
-        console.log('Encountered non ok status: ' + data.status + ' with error message: ' + data.error_message);
-        return 'Error';
-    }
-
-    let places = filterPlaces(data.results);
+    let places = await getFilteredPlaces(getFilteredPlacesKey(key), lat, lon);
 
     let place = getRandomPlace(places);
 
@@ -39,6 +27,41 @@ async function findNearbyFoodPlace(lat, lon): Promise<{ name: string, rating: nu
         address: place.vicinity,
         googleMapsLink: googleMapsLink
     };
+}
+
+async function getFilteredPlaces(filteredPlacesKey: string, lat: number, lon: number) {
+    if (await redisClient.exists(filteredPlacesKey)) {
+        console.log('Item exists in Redis, fetching');
+        const redisValue = await redisClient.get(filteredPlacesKey);
+        return await JSON.parse(redisValue);
+    }
+
+    let params = new URLSearchParams({
+        key: process.env.GOOGLE_MAPS_API_KEY,
+        location: lat + ',' + lon,
+        radius: '5000',
+        type: 'restaurant',
+        opennow: '1',
+        rankby: 'prominence'
+    });
+
+    let url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?' + params.toString();
+    const res = await fetch(url);
+    const data = await res.json();
+
+    if (data.status !== 'OK') {
+        console.log('Encountered non ok status: ' + data.status + ' with error message: ' + data.error_message);
+        return 'Error';
+    }
+
+    const filteredPlaces = filterPlaces(data.results);
+
+    if (!isEmpty(filteredPlaces)) {
+        // TTL: 600 seconds = 5 minutes
+        await redisClient.set(filteredPlacesKey, JSON.stringify(filteredPlaces), 'EX', 300);
+    }
+
+    return filteredPlaces;
 }
 
 function filterPlaces(places) {
@@ -107,11 +130,23 @@ async function getGoogleMapsLink(name, address, lat, lon) {
     return 'https://www.google.com/maps/dir/' + String(lat) + ',' + String(lon) + '/' + encodeURIComponent(name) + ',' + encodeURIComponent(address);
 }
 
-export default async function FoodPage({ params, searchParams }) {
-    console.log(params);
-    console.log(searchParams);
+function isEmpty(obj: object): boolean {
+    return obj // 👈 null and undefined check
+        && Object.keys(obj).length === 0
+        && Object.getPrototypeOf(obj) === Object.prototype
+}
 
-    const place = await findNearbyFoodPlace(searchParams.lat, searchParams.lon);
+function getFilteredPlacesKey(userKey: string): string {
+    return userKey + '_filtered-places';
+}
+
+export default async function FoodPage({ params, searchParams }) {
+    if (!cookies().has('key')) {
+        redirect('/');
+    }
+
+    const key = cookies().get('key').value;
+    const place = await findNearbyFoodPlace(key, Number(searchParams.lat), Number(searchParams.lon));
 
     if (place === 'Error') {
         return (

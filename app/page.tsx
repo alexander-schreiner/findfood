@@ -1,8 +1,12 @@
 'use client';
 
 import { useRouter } from "next/navigation";
+import { setCookie } from "cookies-next";
 
 export default function Home() {
+    const key = Math.random().toString(36).slice(2, 16);
+    setCookie('key', key);
+
     const router = useRouter();
 
     function redirectToFood(position) {
