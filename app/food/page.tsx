@@ -127,7 +127,7 @@ async function getPhotoSrcFromApi(photoReference, maxHeight, maxWidth) {
 async function getGoogleMapsLink(name, address, lat, lon) {
     return 'https://www.google.com/maps/dir/' + String(lat) + ',' + String(lon) + '/' + encodeURIComponent(name) + ',' + encodeURIComponent(address);
 }
- 
+
 function isEmpty(obj: object): boolean {
     return obj // 👈 null and undefined check
         && Object.keys(obj).length === 0
@@ -162,9 +162,8 @@ export default async function FoodPage({ params, searchParams }) {
                     <a href={place.googleMapsLink} className="
                     mt-6 flex items-center justify-center rounded-md border border-transparent bg-green-700 py-3 px-8 text-base font-bold text-white w-full
                     hover:bg-green-800
-                    focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2
-                    directionsButton
-                    ">Get directions</a>
+                    focus:outline-none
+                    ">🧭 Get directions</a>
                 </div>
             </div>
         </>

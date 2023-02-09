@@ -29,16 +29,23 @@ export default function Home() {
 
     return (
         <>
-            <div className="overflow-hidden bg-white shadow sm:rounded-lg min-h-screen">
-                <div className="px-4 py-5 sm:px-6 ">
-                    <div className="flex flex-col space-y-4">
-                        <h1 className="text-4xl font-bold">Find the next foodplace or restaurant near you!</h1>
-                        <p className="text-xl">
-                            Can't decide where to go out and grab some food?
-                            Sometimes too much options are an obstacle. Just tap "Find food"
-                            and find your next meal destination!
-                        </p>
-                    </div>
+            <div className="flex flex-col">
+                <div className="space-y-4">
+                    <h1 className="text-white font-black flex flex-col">
+                        <div className="text-6xl">
+                            <span>Find</span>
+                            <span className="text-orange-500">Food</span>
+                            <span> 🍔🍕🌮 </span>
+                        </div>
+                        <div className="text-4xl font-extrabold">
+                            <span>Find the next cool food place near you!</span>
+                        </div>
+                    </h1>
+                    <p className="text-white text-bold text-xl">
+                        Can't decide where to go out and grab some food?
+                        Sometimes too much options are an obstacle. Just tap "Find food"
+                        and find your next meal destination!
+                    </p>
                 </div>
 
                 <div className="flex justify-center px-4 py-5 sm:px-6">
@@ -46,8 +53,7 @@ export default function Home() {
                         className="
                         mt-6 flex items-center justify-center rounded-md border border-transparent bg-green-700 py-3 px-8 text-base font-bold text-white w-full sm:w-1/4
                         hover:bg-green-800
-                        focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2
-                        
+                        focus:outline-none
                         ">
                         Find food
                     </button>
