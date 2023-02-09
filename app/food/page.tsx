@@ -127,7 +127,7 @@ async function getPhotoSrcFromApi(photoReference, maxHeight, maxWidth) {
 async function getGoogleMapsLink(name, address, lat, lon) {
     return 'https://www.google.com/maps/dir/' + String(lat) + ',' + String(lon) + '/' + encodeURIComponent(name) + ',' + encodeURIComponent(address);
 }
- 
+
 function isEmpty(obj: object): boolean {
     return obj // 👈 null and undefined check
         && Object.keys(obj).length === 0
@@ -154,12 +154,27 @@ export default async function FoodPage({ params, searchParams }) {
 
     return (
         <>
-            <div className="overflow-hidden bg-white shadow sm:rounded-lg">
-                <div className="px-4 py-5 sm:px-6 min-h-screen">
-                    <h1 className="text-3xl">{place.name} (Rating: {place.rating}/5)</h1>
-                    <h2 className="text-xl">{place.address}</h2>
+            <div className='w-4/12 space-y-4'>
 
-                    <a href={place.googleMapsLink} className="directionsButton">Get directions</a>
+                <div className="text-6xl text-white font-black">
+                    <span>Found</span><span className="text-orange-500">Food 🍽️</span>
+                </div>
+
+                <div className="flex flex-col space-y-6">
+                    <span className="text-3xl text-white font-extrabold">{place.name} (Rating: {place.rating}/5)</span>
+
+                    <a className="text-xl text-white" href={'https://www.google.com/maps/place/' + place.address}>
+                        📍 <span className='underline decoration-dotted decoration-white'>{place.address}</span>
+                    </a>
+
+                    <div className='flex justify-center'>
+                        <a href={place.googleMapsLink} className="
+                    flex items-center justify-center rounded-md border border-transparent bg-orange-500 py-3 px-8 text-base font-bold text-white w-full sm:w-2/5
+                    hover:bg-orange-600
+                    focus:outline-none
+                    ">🧭 Get directions</a>
+                    </div>
+
                 </div>
             </div>
         </>

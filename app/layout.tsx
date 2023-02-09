@@ -1,4 +1,3 @@
-import styles from '../styles/Home.module.css'
 import '../styles/globals.css'
 
 export default function RootLayout({
@@ -13,7 +12,9 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" />
       </head>
       <body>
-        <main className={styles.main}>{children}</main>
+        <main className="flex justify-center bg-gradient-to-b from-[#08031e] to-[#010320] min-h-screen py-6 px-4">
+          {children}
+        </main>
       </body>
     </html>
   )
