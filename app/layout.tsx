@@ -13,7 +13,7 @@ export default function RootLayout({
       </head>
       <body>
         <main className="flex flex-col justify-between items-center bg-gradient-to-b from-[#081575] to-[#17182f] min-h-screen py-6 px-4">
-          <div className='max-w-3xl'>
+          <div className='max-w-xl'>
             {children}
           </div>
         </main>

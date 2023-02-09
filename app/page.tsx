@@ -51,11 +51,11 @@ export default function Home() {
                 <div className="flex justify-center px-4 py-5 sm:px-6">
                     <button onClick={handeClick}
                         className="
-                        mt-6 flex items-center justify-center rounded-md border border-transparent bg-green-700 py-3 px-8 text-base font-bold text-white w-full sm:w-1/4
-                        hover:bg-green-800
+                        mt-6 flex items-center justify-center rounded-md border border-transparent bg-orange-500 py-3 px-8 text-base font-bold text-white w-full sm:w-1/3
+                        hover:bg-orange-600
                         focus:outline-none
                         ">
-                        Find food
+                        🍴 FindFood
                     </button>
                 </div>
             </div>
