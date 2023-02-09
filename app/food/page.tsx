@@ -154,17 +154,20 @@ export default async function FoodPage({ params, searchParams }) {
 
     return (
         <>
-            <div className="overflow-hidden bg-white shadow sm:rounded-lg">
-                <div className="px-4 py-5 sm:px-6 min-h-screen">
-                    <h1 className="text-3xl">{place.name} (Rating: {place.rating}/5)</h1>
-                    <h2 className="text-xl">{place.address}</h2>
+            <div className="flex flex-col space-y-6 w-4/6">
+                <div className='flex flex-col space-y-2'>
+                    <h1 className="text-3xl text-white font-extrabold">{place.name} (Rating: {place.rating}/5)</h1>
+                    <h2 className="text-xl text-white">{place.address}</h2>
+                </div>
 
+                <div className='flex justify-center'>
                     <a href={place.googleMapsLink} className="
-                    mt-6 flex items-center justify-center rounded-md border border-transparent bg-green-700 py-3 px-8 text-base font-bold text-white w-full
-                    hover:bg-green-800
+                    flex items-center justify-center rounded-md border border-transparent bg-orange-500 py-3 px-8 text-base font-bold text-white w-full sm:w-2/5
+                    hover:bg-orange-600
                     focus:outline-none
                     ">🧭 Get directions</a>
                 </div>
+
             </div>
         </>
     )
