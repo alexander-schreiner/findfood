@@ -162,8 +162,10 @@ export default async function FoodPage({ params, searchParams }) {
 
                 <div className="flex flex-col space-y-6">
                     <span className="text-3xl text-white font-extrabold">{place.name} (Rating: {place.rating}/5)</span>
-                    
-                    <span className="text-xl text-white">📍 {place.address}</span>
+
+                    <a className="text-xl text-white" href={'https://www.google.com/maps/place/' + place.address}>
+                        📍 <span className='underline decoration-dotted decoration-white'>{place.address}</span>
+                    </a>
 
                     <div className='flex justify-center'>
                         <a href={place.googleMapsLink} className="
