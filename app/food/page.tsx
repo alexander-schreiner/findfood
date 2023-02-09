@@ -12,11 +12,7 @@ const redisClient = new Redis(process.env.REDIS_URL);
 async function findNearbyFoodPlace(key: string, lat: number, lon: number)
     : Promise<{ name: string, rating: number, ratingCount: number, address: string, googleMapsLink: string } | "Error"> {
 
-    let places = getFilteredPlaces(key, lat, lon);
-
-    console.log(places);
-    console.log(JSON.stringify(places));
-    redisClient.set(key, JSON.stringify(places));
+    let places = await getFilteredPlaces(getFilteredPlacesKey(key), lat, lon);
 
     let place = getRandomPlace(places);
 
@@ -33,11 +29,11 @@ async function findNearbyFoodPlace(key: string, lat: number, lon: number)
     };
 }
 
-async function getFilteredPlaces(key: string, lat: number, lon: number) {
-    if (await redisClient.exists(key)) {
-        console.log('ITEM EXISTS IN REDIS - PANIC!!!');
-        const redisValue = await redisClient.get(key);
-        return;
+async function getFilteredPlaces(filteredPlacesKey: string, lat: number, lon: number) {
+    if (await redisClient.exists(filteredPlacesKey)) {
+        console.log('Item exists in Redis, fetching');
+        const redisValue = await redisClient.get(filteredPlacesKey);
+        return await JSON.parse(redisValue);
     }
 
     let params = new URLSearchParams({
@@ -60,7 +56,10 @@ async function getFilteredPlaces(key: string, lat: number, lon: number) {
 
     const filteredPlaces = filterPlaces(data.results);
 
-    await redisClient.set(key, JSON.stringify(filteredPlaces));
+    if (!isEmpty(filteredPlaces)) {
+        // TTL: 600 seconds = 5 minutes
+        await redisClient.set(filteredPlacesKey, JSON.stringify(filteredPlaces), 'EX', 300);
+    }
 
     return filteredPlaces;
 }
@@ -129,6 +128,16 @@ async function getPhotoSrcFromApi(photoReference, maxHeight, maxWidth) {
 
 async function getGoogleMapsLink(name, address, lat, lon) {
     return 'https://www.google.com/maps/dir/' + String(lat) + ',' + String(lon) + '/' + encodeURIComponent(name) + ',' + encodeURIComponent(address);
+}
+
+function isEmpty(obj: object): boolean {
+    return obj // 👈 null and undefined check
+        && Object.keys(obj).length === 0
+        && Object.getPrototypeOf(obj) === Object.prototype
+}
+
+function getFilteredPlacesKey(userKey: string): string {
+    return userKey + '_filtered-places';
 }
 
 export default async function FoodPage({ params, searchParams }) {
