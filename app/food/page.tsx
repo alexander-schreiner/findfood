@@ -154,20 +154,26 @@ export default async function FoodPage({ params, searchParams }) {
 
     return (
         <>
-            <div className="flex flex-col space-y-6 w-4/6">
-                <div className='flex flex-col space-y-2'>
-                    <h1 className="text-3xl text-white font-extrabold">{place.name} (Rating: {place.rating}/5)</h1>
-                    <h2 className="text-xl text-white">{place.address}</h2>
+            <div className='w-4/12 space-y-4'>
+
+                <div className="text-6xl text-white font-black">
+                    <span>Found</span><span className="text-orange-500">Food 🍽️</span>
                 </div>
 
-                <div className='flex justify-center'>
-                    <a href={place.googleMapsLink} className="
+                <div className="flex flex-col space-y-6">
+                    <span className="text-3xl text-white font-extrabold">{place.name} (Rating: {place.rating}/5)</span>
+                    
+                    <span className="text-xl text-white">📍 {place.address}</span>
+
+                    <div className='flex justify-center'>
+                        <a href={place.googleMapsLink} className="
                     flex items-center justify-center rounded-md border border-transparent bg-orange-500 py-3 px-8 text-base font-bold text-white w-full sm:w-2/5
                     hover:bg-orange-600
                     focus:outline-none
                     ">🧭 Get directions</a>
-                </div>
+                    </div>
 
+                </div>
             </div>
         </>
     )
