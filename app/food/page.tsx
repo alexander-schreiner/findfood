@@ -1,11 +1,9 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { Redis } from 'ioredis';
-import { RedisClient } from 'ioredis/built/connectors/SentinelConnector/types';
 
 export const dynamic = 'force-dynamic',
     revalidate = 30
-
 
 const redisClient = new Redis(process.env.REDIS_URL);
 
@@ -129,7 +127,7 @@ async function getPhotoSrcFromApi(photoReference, maxHeight, maxWidth) {
 async function getGoogleMapsLink(name, address, lat, lon) {
     return 'https://www.google.com/maps/dir/' + String(lat) + ',' + String(lon) + '/' + encodeURIComponent(name) + ',' + encodeURIComponent(address);
 }
-
+ 
 function isEmpty(obj: object): boolean {
     return obj // 👈 null and undefined check
         && Object.keys(obj).length === 0
