@@ -42,7 +42,13 @@ export default function Home() {
                 </div>
 
                 <div className="flex justify-center px-4 py-5 sm:px-6">
-                    <button onClick={handeClick} className="findFoodButton">
+                    <button onClick={handeClick}
+                        className="
+                        mt-6 flex items-center justify-center rounded-md border border-transparent bg-green-700 py-3 px-8 text-base font-bold text-white w-full sm:w-1/4
+                        hover:bg-green-800
+                        focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2
+                        
+                        ">
                         Find food
                     </button>
                 </div>

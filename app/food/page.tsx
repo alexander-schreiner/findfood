@@ -159,7 +159,12 @@ export default async function FoodPage({ params, searchParams }) {
                     <h1 className="text-3xl">{place.name} (Rating: {place.rating}/5)</h1>
                     <h2 className="text-xl">{place.address}</h2>
 
-                    <a href={place.googleMapsLink} className="directionsButton">Get directions</a>
+                    <a href={place.googleMapsLink} className="
+                    mt-6 flex items-center justify-center rounded-md border border-transparent bg-green-700 py-3 px-8 text-base font-bold text-white w-full
+                    hover:bg-green-800
+                    focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2
+                    directionsButton
+                    ">Get directions</a>
                 </div>
             </div>
         </>
