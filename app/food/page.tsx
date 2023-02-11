@@ -159,7 +159,7 @@ function getFilteredPlacesKey(userKey: string): string {
 }
 
 function getPlacePhotoView(photoReference: string): string {
-    return photoReference;
+    return 'photo_' + photoReference;
 }
 
 export default async function FoodPage({ params, searchParams }) {
