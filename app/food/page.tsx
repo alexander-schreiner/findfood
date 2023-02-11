@@ -1,6 +1,8 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { Redis } from 'ioredis';
+import Image from 'next/image';
+const fs = require('fs');
 
 export const dynamic = 'force-dynamic',
     revalidate = 30
@@ -8,13 +10,11 @@ export const dynamic = 'force-dynamic',
 const redisClient = new Redis(process.env.REDIS_URL);
 
 async function findNearbyFoodPlace(key: string, lat: number, lon: number)
-    : Promise<{ name: string, rating: number, ratingCount: number, address: string, googleMapsLink: string } | "Error"> {
+    : Promise<{ name: string, rating: number, ratingCount: number, address: string, googleMapsLink: string, photos: Array } | "Error"> {
 
     let places = await getFilteredPlaces(getFilteredPlacesKey(key), lat, lon);
 
     let place = getRandomPlace(places);
-
-    // getPhotoSrcFromApi(place.photos[0].photo_reference, 400, 400);
 
     let googleMapsLink = await getGoogleMapsLink(place.name, place.vicinity, lat, lon);
 
@@ -23,7 +23,8 @@ async function findNearbyFoodPlace(key: string, lat: number, lon: number)
         rating: place.rating,
         ratingCount: place.user_ratings_total,
         address: place.vicinity,
-        googleMapsLink: googleMapsLink
+        googleMapsLink: googleMapsLink,
+        photos: place.photos
     };
 }
 
@@ -121,7 +122,15 @@ async function getPhotoSrcFromApi(photoReference, maxHeight, maxWidth) {
     let url = 'https://maps.googleapis.com/maps/api/place/photo?' + params.toString();
     const res = await fetch(url);
     let blob = await res.blob();
-    return URL.createObjectURL(blob);
+    let type = res.headers.get("Content-Type");
+
+    /**
+     * @link https://stackoverflow.com/a/69589656/9206045
+     */
+    const arrayBuffer = await blob.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+
+    return "data:" + type + ';base64,' + buffer.toString('base64');
 }
 
 async function getGoogleMapsLink(name, address, lat, lon) {
@@ -138,7 +147,8 @@ function getFilteredPlacesKey(userKey: string): string {
     return userKey + '_filtered-places';
 }
 
-export default async function FoodPage({ params, searchParams }) {
+export default async function FoodPage({ searchParams }) {
+
     if (!cookies().has('key')) {
         redirect('/');
     }
@@ -152,6 +162,8 @@ export default async function FoodPage({ params, searchParams }) {
         );
     }
 
+    let base64Image = await getPhotoSrcFromApi(place.photos[0].photo_reference, 400, 400);
+
     return (
         <>
             <div className='w-4/12 space-y-4'>
@@ -163,13 +175,21 @@ export default async function FoodPage({ params, searchParams }) {
                 <div className="flex flex-col space-y-6">
                     <span className="text-3xl text-white font-extrabold">{place.name} (Rating: {place.rating}/5)</span>
 
+                    <Image src={base64Image}
+                        alt="a" width={400} height={400}
+                        className='
+                        border-4
+                        border-orange-500
+                        '
+                    />
+
                     <a className="text-xl text-white" href={'https://www.google.com/maps/place/' + place.address}>
                         📍 <span className='underline decoration-dotted decoration-white'>{place.address}</span>
                     </a>
 
                     <div className='flex justify-center'>
                         <a href={place.googleMapsLink} className="
-                    flex items-center justify-center rounded-md border border-transparent bg-orange-500 py-3 px-8 text-base font-bold text-white w-full sm:w-2/5
+                    flex items-center justify-center rounded-md border border-transparent bg-orange-500 py-3 px-6 text-base font-bold text-white w-full sm:w-2/5
                     hover:bg-orange-600
                     focus:outline-none
                     ">🧭 Get directions</a>
