@@ -2,7 +2,6 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { Redis } from 'ioredis';
 import Image from 'next/image';
-const fs = require('fs');
 
 export const dynamic = 'force-dynamic',
     revalidate = 30
@@ -15,6 +14,7 @@ async function findNearbyFoodPlace(key: string, lat: number, lon: number)
     let places = await getFilteredPlaces(getFilteredPlacesKey(key), lat, lon);
 
     let place = getRandomPlace(places);
+    console.log(place);
 
     let googleMapsLink = await getGoogleMapsLink(place.name, place.vicinity, lat, lon);
 
@@ -145,6 +145,12 @@ function isEmpty(obj: object): boolean {
 
 function getFilteredPlacesKey(userKey: string): string {
     return userKey + '_filtered-places';
+}
+
+async function getReviews() {
+
+    // https://maps.googleapis.com/maps/api/place/details/json?key=&place_id=ChIJN83D7XlPqEcRHJzi7Svvyt0&fields=reviews
+
 }
 
 export default async function FoodPage({ params, searchParams }) {
