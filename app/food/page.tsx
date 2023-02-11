@@ -112,6 +112,12 @@ function getRandomPlace(places) {
 }
 
 async function getPhotoSrcFromApi(photoReference, maxHeight, maxWidth) {
+    const placePhotoView = getPlacePhotoView(photoReference);
+    if (await redisClient.exists(placePhotoView)) {
+        console.log('Photo exists in Redis, fetching');
+        return await redisClient.get(placePhotoView);
+    }
+
     let params = new URLSearchParams({
         key: process.env.GOOGLE_MAPS_API_KEY,
         photo_reference: photoReference,
@@ -130,7 +136,12 @@ async function getPhotoSrcFromApi(photoReference, maxHeight, maxWidth) {
     const arrayBuffer = await blob.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
-    return "data:" + type + ';base64,' + buffer.toString('base64');
+    const dataUrl = "data:" + type + ';base64,' + buffer.toString('base64');
+
+    // 60min = 60 * 60 = 3600
+    redisClient.set(placePhotoView, dataUrl, 'EX', 300);
+
+    return dataUrl;
 }
 
 async function getGoogleMapsLink(name, address, lat, lon) {
@@ -145,6 +156,10 @@ function isEmpty(obj: object): boolean {
 
 function getFilteredPlacesKey(userKey: string): string {
     return userKey + '_filtered-places';
+}
+
+function getPlacePhotoView(photoReference: string): string {
+    return 'photo_' + photoReference;
 }
 
 async function getReviews() {
