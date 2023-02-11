@@ -10,7 +10,7 @@ export const dynamic = 'force-dynamic',
 const redisClient = new Redis(process.env.REDIS_URL);
 
 async function findNearbyFoodPlace(key: string, lat: number, lon: number)
-    : Promise<{ name: string, rating: number, ratingCount: number, address: string, googleMapsLink: string, photos: Array } | "Error"> {
+    : Promise<{ name: string, rating: number, ratingCount: number, address: string, googleMapsLink: string, photos: Array<any> } | "Error"> {
 
     let places = await getFilteredPlaces(getFilteredPlacesKey(key), lat, lon);
 
@@ -147,7 +147,7 @@ function getFilteredPlacesKey(userKey: string): string {
     return userKey + '_filtered-places';
 }
 
-export default async function FoodPage({ searchParams }) {
+export default async function FoodPage({ params, searchParams }) {
 
     if (!cookies().has('key')) {
         redirect('/');
