@@ -2,7 +2,7 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { Redis } from 'ioredis';
 import Image from 'next/image';
-const fs = require('fs');
+import Rating from '../../components/rating';
 
 export const dynamic = 'force-dynamic',
     revalidate = 30
@@ -24,7 +24,7 @@ async function findNearbyFoodPlace(key: string, lat: number, lon: number)
         ratingCount: place.user_ratings_total,
         address: place.vicinity,
         googleMapsLink: googleMapsLink,
-        photos: place.photos
+        photos: place.photos,
     };
 }
 
@@ -187,29 +187,35 @@ export default async function FoodPage({ params, searchParams }) {
                     <span>Found</span><span className="text-orange-500">Food 🍽️</span>
                 </div>
 
-                <div className="flex flex-col space-y-6">
-                    <span className="text-3xl text-white font-extrabold">{place.name} (Rating: {place.rating}/5)</span>
+                <div className="flex flex-col space-y-2">
 
-                    <Image src={base64Image}
-                        alt="a" width={400} height={400}
-                        className='
+                    <div className="flex items-center">
+                        <Rating stars={place.rating} />
+                    </div>
+
+                    <span className="text-3xl text-white font-extrabold">{place.name}</span>
+
+                    <div className='flex flex-col space-y-6'>
+                        <Image src={base64Image}
+                            alt="a" width={400} height={400}
+                            className='
                         border-4
                         border-orange-500
                         '
-                    />
+                        />
 
-                    <a className="text-xl text-white" href={'https://www.google.com/maps/place/' + place.address}>
-                        📍 <span className='underline decoration-dotted decoration-white'>{place.address}</span>
-                    </a>
+                        <a className="text-xl text-white" href={'https://www.google.com/maps/place/' + place.address}>
+                            📍 <span className='underline decoration-dotted decoration-white'>{place.address}</span>
+                        </a>
 
-                    <div className='flex justify-center'>
-                        <a href={place.googleMapsLink} className="
+                        <div className='flex justify-center'>
+                            <a href={place.googleMapsLink} className="
                     flex items-center justify-center rounded-md border border-transparent bg-orange-500 py-3 px-6 text-base font-bold text-white w-full sm:w-2/5
                     hover:bg-orange-600
                     focus:outline-none
                     ">🧭 Get directions</a>
+                        </div>
                     </div>
-
                 </div>
             </div>
         </>
