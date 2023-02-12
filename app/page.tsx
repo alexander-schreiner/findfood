@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { setCookie } from "cookies-next";
+import SocialMediaLinks from "../components/socialMediaLinks";
 
 export default function Home() {
     const key = Math.random().toString(36).slice(2, 16);
@@ -73,6 +74,10 @@ export default function Home() {
                             🍴 FindFood
                         </button>
                     </div>
+                </div>
+
+                <div className="mt-3">
+                    <SocialMediaLinks />
                 </div>
             </div>
         </>
