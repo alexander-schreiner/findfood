@@ -1,3 +1,3 @@
 # FindFood
 
-(FindFood)[https://findfood.vercel.app/]
+[FindFood](https://findfood.vercel.app/)
