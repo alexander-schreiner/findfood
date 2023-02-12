@@ -24,7 +24,21 @@ export default function Home() {
             return;
         }
 
-        navigator.geolocation.getCurrentPosition(redirectToFood);
+        navigator.geolocation.getCurrentPosition(redirectToFood, function (error: GeolocationPositionError) {
+            switch (error.code) {
+                case GeolocationPositionError.PERMISSION_DENIED:
+                    alert('Permission denied. Could not retrieve your current location');
+                    break;
+                case GeolocationPositionError.POSITION_UNAVAILABLE:
+                    alert('Position unavailable. Could not retrieve your current location');
+                    break;
+                case GeolocationPositionError.TIMEOUT:
+                    alert('Timeout. Could not retrieve your current location');
+                    break;
+                default:
+                    alert('Could not retrieve your current location. Unknown error');
+            }
+        });
     }
 
     return (
