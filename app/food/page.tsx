@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 import { Redis } from 'ioredis';
 import Image from 'next/image';
 import Rating from '../../components/rating';
+import SocialMediaLinks from '../../components/socialMediaLinks';
 
 export const dynamic = 'force-dynamic',
     revalidate = 30
@@ -216,6 +217,10 @@ export default async function FoodPage({ params, searchParams }) {
                     ">🧭 Get directions</a>
                         </div>
                     </div>
+                </div>
+
+                <div>
+                    <SocialMediaLinks />
                 </div>
             </div>
         </>
