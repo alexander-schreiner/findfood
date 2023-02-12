@@ -1,6 +1,6 @@
 import Star from "./star";
 
-export default function Rating({ stars }) {
+export default function Rating({ stars }: { stars: number }) {
     const fullDigitStars = Math.round(stars);
     return (
         <>
