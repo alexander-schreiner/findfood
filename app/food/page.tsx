@@ -10,14 +10,35 @@ export const dynamic = 'force-dynamic',
 
 const redisClient = new Redis(process.env.REDIS_URL);
 
-async function findNearbyFoodPlace(key: string, lat: number, lon: number)
-    : Promise<{ name: string, rating: number, ratingCount: number, address: string, googleMapsLink: string, photos: Array<any> } | "Error"> {
+type PlaceData = {
+    name: string,
+    rating: number,
+    ratingCount: number,
+    address: string,
+    googleMapsLink: string,
+    base64Image: string
+};
 
-    let places = await getFilteredPlaces(getFilteredPlacesKey(key), lat, lon);
+type Place = {
+    name: string,
+    rating: number,
+    vicinity: string,
+    user_ratings_total: number,
+    photos: Array<{ photo_reference: string }>
+};
 
-    let place = getRandomPlace(places);
+async function findNearbyFoodPlace(key: string, lat: number, lon: number): Promise<PlaceData | "Error"> {
 
-    let googleMapsLink = await getGoogleMapsLink(place.name, place.vicinity, lat, lon);
+    const places = await getFilteredPlaces(getFilteredPlacesKey(key), lat, lon);
+
+    if (places === "Error") {
+        return "Error";
+    }
+
+    const place = getRandomPlace(places);
+
+    const googleMapsLink = await getGoogleMapsLink(place.name, place.vicinity, lat, lon);
+    const base64Image = await getPhotoSrcFromApi(place.photos[0].photo_reference, 400, 400);
 
     return {
         name: place.name,
@@ -25,11 +46,11 @@ async function findNearbyFoodPlace(key: string, lat: number, lon: number)
         ratingCount: place.user_ratings_total,
         address: place.vicinity,
         googleMapsLink: googleMapsLink,
-        photos: place.photos,
+        base64Image: base64Image
     };
 }
 
-async function getFilteredPlaces(filteredPlacesKey: string, lat: number, lon: number) {
+async function getFilteredPlaces(filteredPlacesKey: string, lat: number, lon: number): Promise<Array<Place> | "Error"> {
     if (await redisClient.exists(filteredPlacesKey)) {
         console.log('Item exists in Redis, fetching');
         const redisValue = await redisClient.get(filteredPlacesKey);
@@ -108,11 +129,11 @@ function filterPlaces(places) {
     return places;
 }
 
-function getRandomPlace(places) {
+function getRandomPlace(places: Array<Place>): Place {
     return places[Math.floor(Math.random() * places.length)];
 }
 
-async function getPhotoSrcFromApi(photoReference, maxHeight, maxWidth) {
+async function getPhotoSrcFromApi(photoReference: string, maxHeight: number, maxWidth: number): Promise<string> {
     const placePhotoView = getPlacePhotoView(photoReference);
     if (await redisClient.exists(placePhotoView)) {
         console.log('Photo exists in Redis, fetching');
@@ -145,7 +166,7 @@ async function getPhotoSrcFromApi(photoReference, maxHeight, maxWidth) {
     return dataUrl;
 }
 
-async function getGoogleMapsLink(name, address, lat, lon) {
+async function getGoogleMapsLink(name: string, address: string, lat: number, lon: number): Promise<string> {
     return 'https://www.google.com/maps/dir/' + String(lat) + ',' + String(lon) + '/' + encodeURIComponent(name) + ',' + encodeURIComponent(address);
 }
 
@@ -178,8 +199,6 @@ export default async function FoodPage({ params, searchParams }) {
         );
     }
 
-    let base64Image = await getPhotoSrcFromApi(place.photos[0].photo_reference, 400, 400);
-
     return (
         <>
             <div className='w-4/12 space-y-4'>
@@ -197,7 +216,7 @@ export default async function FoodPage({ params, searchParams }) {
                     <span className="text-3xl text-white font-extrabold">{place.name}</span>
 
                     <div className='flex flex-col space-y-6'>
-                        <Image src={base64Image}
+                        <Image src={place.base64Image}
                             alt="a" width={400} height={400}
                             className='
                         border-4
@@ -210,11 +229,12 @@ export default async function FoodPage({ params, searchParams }) {
                         </a>
 
                         <div className='flex justify-center'>
-                            <a href={place.googleMapsLink} className="
-                    flex items-center justify-center rounded-md border border-transparent bg-orange-500 py-3 px-6 text-base font-bold text-white w-full sm:w-2/5
-                    hover:bg-orange-600
-                    focus:outline-none
-                    ">🧭 Get directions</a>
+                            <a href={place.googleMapsLink}
+                                className="flex items-center justify-center rounded-md border border-transparent 
+                                bg-orange-500 py-3 px-6 text-base font-bold text-white w-full sm:w-2/5 
+                                hover:bg-orange-600 focus:outline-none">
+                                🧭 Get directions
+                            </a>
                         </div>
                     </div>
                 </div>

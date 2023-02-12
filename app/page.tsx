@@ -10,16 +10,16 @@ export default function Home() {
 
     const router = useRouter();
 
-    function redirectToFood(position) {
+    function redirectToFood(position: GeolocationPosition): void {
         let searchParams = new URLSearchParams({
-            lat: position.coords.latitude,
-            lon: position.coords.longitude
+            lat: String(position.coords.latitude),
+            lon: String(position.coords.longitude)
         });
 
         router.push('/food?' + searchParams.toString());
     }
 
-    function handeClick() {
+    function handeClick(): void {
         if (!navigator.geolocation) {
             alert('Geolocation is not supported by this browser');
             return;
