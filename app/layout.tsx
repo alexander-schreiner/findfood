@@ -1,4 +1,5 @@
 import '../styles/globals.css'
+import { AnalyticsWrapper } from '../components/analytics'
 
 export default function RootLayout({
   children
@@ -14,6 +15,7 @@ export default function RootLayout({
       <body>
         <main className="flex justify-center bg-gradient-to-b from-[#08031e] to-[#010320] min-h-screen py-6 px-4">
           {children}
+          <AnalyticsWrapper />
         </main>
       </body>
     </html>
